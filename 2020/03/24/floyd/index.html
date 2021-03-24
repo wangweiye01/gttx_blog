@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>floyd最短路径算法 | 杭州管通天下科技有限公司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="floyd算法弗洛伊德算法又称插点法是解决任意两点间的最短路径的一种算法 适用范围边权可正可负，运行一次算法即可求得任意两点间的最短路径（无负权回路即可） 可以解决”多源最短路径”即计算多个源点到每个点的最短路径。既然能解决多源那自然可以解决”单源最短路径”问题 什么是负权回路图中1号点到3号点的最短路径是什么？  由于每次经过1-&gt;2-&gt;3-&gt;1这样的环，最短路径就会-1，所以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="floyd最短路径算法">
+<meta property="og:url" content="https://wangweiye01.github.io/gttx_blog/2020/03/24/floyd/index.html">
+<meta property="og:site_name" content="杭州管通天下科技有限公司">
+<meta property="og:description" content="floyd算法弗洛伊德算法又称插点法是解决任意两点间的最短路径的一种算法 适用范围边权可正可负，运行一次算法即可求得任意两点间的最短路径（无负权回路即可） 可以解决”多源最短路径”即计算多个源点到每个点的最短路径。既然能解决多源那自然可以解决”单源最短路径”问题 什么是负权回路图中1号点到3号点的最短路径是什么？  由于每次经过1-&gt;2-&gt;3-&gt;1这样的环，最短路径就会-1，所以">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://s1.wailian.download/2020/03/24/6.10.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/03/24/6.2-floyd.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/03/24/6.3-.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/03/24/6.5-1.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/03/24/6.6-1-2.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/03/24/6.7-1-2-3.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/03/24/6.8-1-2-3-4.png">
+<meta property="article:published_time" content="2020-03-24T07:39:41.000Z">
+<meta property="article:modified_time" content="2021-03-24T10:24:25.122Z">
+<meta property="article:author" content="管通天下技术团队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://s1.wailian.download/2020/03/24/6.10.png">
+  
+    <link rel="alternate" href="/gttx_blog/atom.xml" title="杭州管通天下科技有限公司" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/gttx_blog/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/gttx_blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/gttx_blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/gttx_blog/" id="logo">杭州管通天下科技有限公司</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/gttx_blog/" id="subtitle">求知若渴，虚心若愚</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/gttx_blog/">Home</a>
+        
+          <a class="main-nav-link" href="/gttx_blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/gttx_blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://wangweiye01.github.io/gttx_blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-floyd" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/gttx_blog/2020/03/24/floyd/" class="article-date">
+  <time class="dt-published" datetime="2020-03-24T07:39:41.000Z" itemprop="datePublished">2020-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      floyd最短路径算法
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="floyd算法"><a href="#floyd算法" class="headerlink" title="floyd算法"></a>floyd算法</h2><p>弗洛伊德算法又称插点法是<strong>解决任意两点间的最短路径的一种算法</strong></p>
+<h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><p>边权可正可负，运行一次算法即可求得任意两点间的最短路径（无负权回路即可）</p>
+<p>可以解决”多源最短路径”即计算多个源点到每个点的最短路径。既然能解决多源那自然可以解决”单源最短路径”问题</p>
+<h3 id="什么是负权回路"><a href="#什么是负权回路" class="headerlink" title="什么是负权回路"></a>什么是负权回路</h3><p>图中1号点到3号点的最短路径是什么？</p>
+<p><img src="http://s1.wailian.download/2020/03/24/6.10.png" alt="6.10.png"></p>
+<p>由于每次经过1-&gt;2-&gt;3-&gt;1这样的环，最短路径就会-1，所以永远找不到最短路径</p>
+<h2 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h2><p><img src="http://s1.wailian.download/2020/03/24/6.2-floyd.png" alt="6.2-floyd.png"></p>
+<p>有4个人处在1，2，3，4四个城市，为每个人规划旅行轨迹，要求每个人都能游览所有城市，并且每个人的路程都要最短</p>
+<p>总结问题：计算图中各个顶点到各个顶点的最短距离</p>
+<p>首先我们定义一个二维数组来存储图中最易可见的点对点(不允许经过第三点)之间的距离，如果不能到达使用∞表示。另外规定自己到自己的距离是0，具体表示如下</p>
+<p><a target="_blank" rel="noopener" href="http://www.wailian.work/image/Ae1zve"><img src="http://s1.wailian.download/2020/03/24/6.3-.png" alt="6.3-.png"></a></p>
+<p>如果要使两点之间距离变短，唯一方法就是通过第三个点来解决。例如a点到b点的距离通过顶点k来中转那么a-&gt;k-&gt;b才有可能缩短a-&gt;b的距离。那么这个k点是哪个点呢？是否不只通过1个k点最短，而是经过两个或者更多点最短，比如a-&gt;k1-&gt;k2&gt;b</p>
+<p>比如图中4-&gt;3的距离是12，如果经过1点，那么4-&gt;1-&gt;3的距离就变为11。现在只允许经过1号点，求i点到j点的最短距离，只需判断e[i][1]+e[1][j]是否比e[i][j]要小。代码实现如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个4行4列的二维数组</span></span><br><span class="line">m = [[<span class="number">0</span>]*<span class="number">4</span> <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>)]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 为数组赋值</span></span><br><span class="line">m[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">m[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">2</span></span><br><span class="line">m[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">6</span></span><br><span class="line">m[<span class="number">0</span>][<span class="number">3</span>] = <span class="number">4</span></span><br><span class="line">m[<span class="number">1</span>][<span class="number">0</span>] = <span class="number">9999</span></span><br><span class="line">m[<span class="number">1</span>][<span class="number">1</span>] = <span class="number">0</span></span><br><span class="line">m[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">3</span></span><br><span class="line">m[<span class="number">1</span>][<span class="number">3</span>] = <span class="number">9999</span></span><br><span class="line">m[<span class="number">2</span>][<span class="number">0</span>] = <span class="number">7</span></span><br><span class="line">m[<span class="number">2</span>][<span class="number">1</span>] = <span class="number">9999</span></span><br><span class="line">m[<span class="number">2</span>][<span class="number">2</span>] = <span class="number">0</span></span><br><span class="line">m[<span class="number">2</span>][<span class="number">3</span>] = <span class="number">1</span></span><br><span class="line">m[<span class="number">3</span>][<span class="number">0</span>] = <span class="number">5</span></span><br><span class="line">m[<span class="number">3</span>][<span class="number">1</span>] = <span class="number">9999</span></span><br><span class="line">m[<span class="number">3</span>][<span class="number">2</span>] = <span class="number">12</span></span><br><span class="line">m[<span class="number">3</span>][<span class="number">3</span>] = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;原路径数据:&#x27;</span>, m)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许经过1号点的最短路径</span></span><br><span class="line">n = copy.deepcopy(m)</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line">j = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        <span class="keyword">if</span> (n[i][j] &gt; n[i][<span class="number">0</span>] + n[<span class="number">0</span>][j]):</span><br><span class="line">                n[i][j] = n[i][<span class="number">0</span>] + n[<span class="number">0</span>][j]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;在允许经过1号点后的最短路径:&#x27;</span>, n)</span><br></pre></td></tr></table></figure>
+
+<p>执行结果如下：</p>
+<p>原路径数据: [[0, 2, 6, 4], [9999, 0, 3, 9999], [7, 9999, 0, 1], [5, 9999, 12, 0]]</p>
+<p>在允许经过1号点后的最短路径: [[0, 2, 6, 4], [9999, 0, 3, 9999], [7, 9, 0, 1], [5, 7, 11, 0]]</p>
+<p><img src="http://s1.wailian.download/2020/03/24/6.5-1.png" alt="6.5-1.png"></p>
+<p>通过图中白色背景处我们可以看到通过1号点中转的情况下,3-&gt;2,4-&gt;2,4-&gt;3的路径都变短了</p>
+<p>接下来求只允许1号和2号点的情况下任意两点间的最短距离，如何做呢？我们只需要在只经过1号点时任意两点最短距离的结果下，再判断经过2号顶点如何使i号点到j号点的路径边的更短</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 再允许经过2号点后的路径</span></span><br><span class="line">o = copy.deepcopy(n)</span><br><span class="line">i = <span class="number">0</span></span><br><span class="line">j = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        <span class="keyword">if</span>(o[i][j] &gt; o[i][<span class="number">1</span>] + o[<span class="number">1</span>][j]):</span><br><span class="line">            o[i][j] = o[i][<span class="number">1</span>] + o[<span class="number">1</span>][j]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;再允许经过2号点后的最短路径:&#x27;</span>, o)</span><br></pre></td></tr></table></figure>
+
+<p>执行结果如下：</p>
+<p>再允许经过2号点后的最短路径: [[0, 2, 5, 4], [9999, 0, 3, 9999], [7, 9, 0, 1], [5, 7, 10, 0]]</p>
+<p><img src="http://s1.wailian.download/2020/03/24/6.6-1-2.png" alt="6.6-1-2.png"></p>
+<p>同理继续在只允许1，2，3进行中转的情况下求最短距离。</p>
+<p><img src="http://s1.wailian.download/2020/03/24/6.7-1-2-3.png" alt="6.7-1-2-3.png"></p>
+<p>最后在允许通过所有顶点作为中转，任意两点之间最终的最短路径为：</p>
+<p><img src="http://s1.wailian.download/2020/03/24/6.8-1-2-3-4.png" alt="6.8-1-2-3-4.png"></p>
+<p>整个算法最终代码实现如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">k = <span class="number">0</span></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line">j = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">            <span class="keyword">if</span> (m[i][j] &gt; m[i][k] + m[k][j]):</span><br><span class="line">                m[i][j] = m[i][k] + m[k][j]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&#x27;最终路径:&#x27;</span>, m)</span><br></pre></td></tr></table></figure>
+
+<p>最终路径: [[0, 2, 5, 4], [9, 0, 3, 4], [6, 8, 0, 1], [5, 7, 10, 0]]</p>
+<p>通过这种方法我们可以求出任意两个点之间最短路径。它的时间复杂度是 O(n<sup>3</sup>)。如果想要解决两点之间最短路径或者一个点到各个点之间的最短路径，用这个算法当然可以，但是要考虑效率有更好的算法比如Dijkstra迪杰斯特拉算法</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://wangweiye01.github.io/gttx_blog/2020/03/24/floyd/" data-id="ckmnaz72i0004gf6kg5adf181" data-title="floyd最短路径算法" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/gttx_blog/2021/03/24/browser-cache/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          浏览器缓存机制
+        
+      </div>
+    </a>
+  
+  
+    <a href="/gttx_blog/2020/03/21/elasticsearch/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">elasticsearch全文搜索</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/gttx_blog/2021/03/24/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2021/03/24/browser-cache/">浏览器缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/03/24/floyd/">floyd最短路径算法</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/03/21/elasticsearch/">elasticsearch全文搜索</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/02/17/websocket/">websocket简介与实战</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 管通天下技术团队<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/gttx_blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/gttx_blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/gttx_blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/gttx_blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/gttx_blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

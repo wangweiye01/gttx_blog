@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>elasticsearch全文搜索 | 杭州管通天下科技有限公司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="什么是ElasticsearchElasticsearch是一个开源的，分布式，高可用的数据库，是目前全文搜索的首选。它可以快速的存储、搜索、分析海量数据。 Elastic是基于开源库Lucene开发的，提供了REST API的操作接口，简单易用 优秀案例GitHub使用ElasticSearch做PB级搜索；包括但不限于维基百科、携程等成功案例； 为什么ES全文搜索查询速度快ES检索速度极快的很">
+<meta property="og:type" content="article">
+<meta property="og:title" content="elasticsearch全文搜索">
+<meta property="og:url" content="https://wangweiye01.github.io/gttx_blog/2020/03/21/elasticsearch/index.html">
+<meta property="og:site_name" content="杭州管通天下科技有限公司">
+<meta property="og:description" content="什么是ElasticsearchElasticsearch是一个开源的，分布式，高可用的数据库，是目前全文搜索的首选。它可以快速的存储、搜索、分析海量数据。 Elastic是基于开源库Lucene开发的，提供了REST API的操作接口，简单易用 优秀案例GitHub使用ElasticSearch做PB级搜索；包括但不限于维基百科、携程等成功案例； 为什么ES全文搜索查询速度快ES检索速度极快的很">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="http://s1.wailian.download/2020/05/19/termindex.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/05/08/smart.png">
+<meta property="og:image" content="http://s1.wailian.download/2020/05/08/WX20200508-145012-max-word.png">
+<meta property="article:published_time" content="2020-03-21T08:02:02.000Z">
+<meta property="article:modified_time" content="2021-03-24T10:24:25.122Z">
+<meta property="article:author" content="管通天下技术团队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://s1.wailian.download/2020/05/19/termindex.png">
+  
+    <link rel="alternate" href="/gttx_blog/atom.xml" title="杭州管通天下科技有限公司" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/gttx_blog/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/gttx_blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/gttx_blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/gttx_blog/" id="logo">杭州管通天下科技有限公司</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/gttx_blog/" id="subtitle">求知若渴，虚心若愚</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/gttx_blog/">Home</a>
+        
+          <a class="main-nav-link" href="/gttx_blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/gttx_blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://wangweiye01.github.io/gttx_blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-elasticsearch" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/gttx_blog/2020/03/21/elasticsearch/" class="article-date">
+  <time class="dt-published" datetime="2020-03-21T08:02:02.000Z" itemprop="datePublished">2020-03-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      elasticsearch全文搜索
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="什么是Elasticsearch"><a href="#什么是Elasticsearch" class="headerlink" title="什么是Elasticsearch"></a>什么是Elasticsearch</h2><p>Elasticsearch是一个开源的，分布式，高可用的数据库，是目前<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%85%A8%E6%96%87%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E">全文搜索</a>的首选。它可以快速的存储、搜索、分析海量数据。</p>
+<p>Elastic是基于开源库Lucene开发的，提供了REST API的操作接口，简单易用</p>
+<h2 id="优秀案例"><a href="#优秀案例" class="headerlink" title="优秀案例"></a>优秀案例</h2><p>GitHub使用ElasticSearch做PB级搜索；包括但不限于维基百科、携程等成功案例；</p>
+<h2 id="为什么ES全文搜索查询速度快"><a href="#为什么ES全文搜索查询速度快" class="headerlink" title="为什么ES全文搜索查询速度快"></a>为什么ES全文搜索查询速度快</h2><p>ES检索速度极快的很重要原理就是使用了<code>倒排索引</code>。什么是倒排索引？通常我们理解的索引就是通过<code>key</code>找到对应的<code>value</code>，所以通俗来讲倒排索引就是通过<code>value</code>找到对应的<code>key</code></p>
+<p><img src="http://s1.wailian.download/2020/05/19/termindex.png" alt="termindex.png"></p>
+<p>理解上图可以了解倒排索引的基本原理。首先ES索引时会先将文本进行分词，然后记录分词和文档的对应关系。当查询时，对查询条件同样进行分词，然后根据分词匹配对应的文档。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="Node和Cluster"><a href="#Node和Cluster" class="headerlink" title="Node和Cluster"></a>Node和Cluster</h3><p>Elastic 本质上是一个分布式数据库，允许多台服务器协同工作，每台服务器可以运行多个Elastic实例</p>
+<p>单个 Elastic 实例称为一个节点（node）。一组节点构成一个集群（cluster）</p>
+<h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><p>索引是具有某种相似特征文档的集合。类似于MySql中的Database</p>
+<h3 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h3><p>es6.x建议在一个index中保持一个type</p>
+<h3 id="Document"><a href="#Document" class="headerlink" title="Document"></a>Document</h3><p>文档是可以被索引的基本信息单元。文档用JSON表示。类似于MySql中的一条数据(Row)</p>
+<h3 id="Field"><a href="#Field" class="headerlink" title="Field"></a>Field</h3><p>属性，类似于MySql中的某个字段(Column)</p>
+<h2 id="安装Elasticsearch-6-3-2"><a href="#安装Elasticsearch-6-3-2" class="headerlink" title="安装Elasticsearch(6.3.2)"></a>安装Elasticsearch(6.3.2)</h2><p>自己安装，此处选择6.3.2版本</p>
+<h2 id="Kibana安装"><a href="#Kibana安装" class="headerlink" title="Kibana安装"></a>Kibana安装</h2><p>Kibana 是为 Elasticsearch设计的开源分析和可视化平台。你可以使用 Kibana 来搜索，查看存储在 Elasticsearch 索引中的数据并与之交互。你可以很容易实现高级的数据分析和可视化，以图标的形式展现出来。</p>
+<p>注意与安装的Elasticsearch版本号(6.3.2)一致</p>
+<h2 id="操作数据"><a href="#操作数据" class="headerlink" title="操作数据"></a>操作数据</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"># 新增数据1</span><br><span class="line">PUT &#x2F;person&#x2F;_doc&#x2F;1</span><br><span class="line">&#123;</span><br><span class="line">  &quot;first_name&quot;: &quot;John&quot;,</span><br><span class="line">  &quot;last_name&quot;: &quot;Smith&quot;,</span><br><span class="line">  &quot;age&quot;: 25,</span><br><span class="line">  &quot;about&quot;: &quot;I love to go rock climbing&quot;,</span><br><span class="line">  &quot;interests&quot;: [</span><br><span class="line">    &quot;sports&quot;,</span><br><span class="line">    &quot;music&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 新增数据2</span><br><span class="line">PUT &#x2F;person&#x2F;_doc&#x2F;2</span><br><span class="line">&#123;</span><br><span class="line">  &quot;first_name&quot;: &quot;Eric&quot;,</span><br><span class="line">  &quot;last_name&quot;: &quot;Smith&quot;,</span><br><span class="line">  &quot;age&quot;: 23,</span><br><span class="line">  &quot;about&quot;: &quot;I love basketball&quot;,</span><br><span class="line">  &quot;interests&quot;: [</span><br><span class="line">    &quot;sports&quot;,</span><br><span class="line">    &quot;reading&quot;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 获得1</span><br><span class="line">GET &#x2F;person&#x2F;_doc&#x2F;1</span><br><span class="line"># 获得2</span><br><span class="line">GET &#x2F;person&#x2F;_doc&#x2F;2</span><br><span class="line"></span><br><span class="line"># bool搜索</span><br><span class="line">POST &#x2F;person&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;should&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;first_name&quot;: &quot;Eric&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># bool搜索</span><br><span class="line">POST &#x2F;person&#x2F;_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">      &quot;should&quot;: [</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;last_name&quot;: &quot;Smith&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          &quot;match&quot;: &#123;</span><br><span class="line">            &quot;about&quot;: &quot;basketball&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="ik分词器"><a href="#ik分词器" class="headerlink" title="ik分词器"></a>ik分词器</h2><p><a target="_blank" rel="noopener" href="https://github.com/medcl/elasticsearch-analysis-ik">ik分词器</a>是最流行的中文分词器，点击可查看ik和ES的版本对照关系以及安装方式</p>
+<p>ik提供了两个分词算法<code>ik_smart</code>和<code>ik_max_word</code></p>
+<p>通过以下两个图，可以看出两个算法的区别。ik_smart为智能切分，ik_max_word为最细粒度划分</p>
+<p>ik_smart</p>
+<p><img src="http://s1.wailian.download/2020/05/08/smart.png" alt="smart.png"></p>
+<p>ik_max_word</p>
+<p><img src="http://s1.wailian.download/2020/05/08/WX20200508-145012-max-word.png" alt="WX20200508-145012-max-word.png"></p>
+<p>根据两个算法的区别，一般遵循以下原则：</p>
+<p> <em><strong>索引时，为了提供索引的覆盖范围，通常会采用ik_max_word分析器，会以最细粒度分词索引，搜索时为了提高搜索准确度，会采用ik_smart分析器，会以粗粒度分词</strong></em></p>
+<h2 id="快照创建于恢复"><a href="#快照创建于恢复" class="headerlink" title="快照创建于恢复"></a>快照创建于恢复</h2><p> 使用无论哪个存储数据的软件，定期备份你的数据都是很重要的，es提供了快照机制。你可以使用<code>snapshot</code>API。这个会拿到你集群里当前的状态和数据然后保存到一个共享仓库里。这个备份过程是”智能”的。你的第一个快照会是一个数据的完整拷贝，但是所有后续的快照会保留的是已存快照和新数据之间的差异。随着你不时的对数据进行快照，备份也在增量的添加和删除。这意味着后续备份会相当快速，因为它们只传输很小的数据量。</p>
+<h3 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h3> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> PUT _snapshot&#x2F;my_backup ①</span><br><span class="line">&#123;</span><br><span class="line">    &quot;type&quot;: &quot;fs&quot;, ②</span><br><span class="line">    &quot;settings&quot;: &#123;</span><br><span class="line">        &quot;location&quot;: &quot;&#x2F;mount&#x2F;backups&#x2F;my_backup&quot; ③</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p> ① 给我们的仓库取一个名字，在本例它叫 my_backup。<br> ② 我们指定仓库的类型应该是一个共享文件系统。<br> ③ 最后，我们提供一个已挂载的设备作为目的地址。注意：共享文件系统路径必须确保集群所有节点都可以访问到。</p>
+<h3 id="创建快照"><a href="#创建快照" class="headerlink" title="创建快照"></a>创建快照</h3><p> 一个仓库可以包含多个快照。每个快照跟一系列索引相关（比如所有索引，一部分索引，或者单个索引）。当创建快照的时候，你指定你感兴趣的索引然后给快照取一个唯一的名字。</p>
+<h4 id="快照所有打开的索引"><a href="#快照所有打开的索引" class="headerlink" title="快照所有打开的索引"></a>快照所有打开的索引</h4><p> 让我们从最基础的快照命令开始：</p>
+<p> <code>PUT _snapshot/my_backup/snapshot_1</code></p>
+<p> 这个会备份所有打开的索引到 my_backup 仓库下一个命名为 snapshot_1 的快照里。这个调用会立刻返回，然后快照会在后台运行。如果你想阻塞调用直到快照完成可以添加<code>wait_for_completion</code>标记实现</p>
+<p><code>PUT _snapshot/my_backup/snapshot_1?wait_for_completion=true</code></p>
+<h4 id="快照指定索引"><a href="#快照指定索引" class="headerlink" title="快照指定索引"></a>快照指定索引</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">PUT _snapshot&#x2F;my_backup&#x2F;snapshot_2</span><br><span class="line">&#123;</span><br><span class="line">    &quot;indices&quot;: &quot;index_1,index_2&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个快照命令现在只会备份<code>index1</code>和<code>index2</code>了。</p>
+<h3 id="获取快照信息"><a href="#获取快照信息" class="headerlink" title="获取快照信息"></a>获取快照信息</h3><p>获取某个仓库下所有快照信息</p>
+<p><code>GET _snapshot/my_backup/_all</code></p>
+<p>获取某个仓库下单个快照信息</p>
+<p><code>GET _snapshot/my_backup/snapshot_2</code></p>
+<p>响应</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;snapshots&quot;</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="attr">&quot;snapshot&quot;</span>: <span class="string">&quot;snapshot_202005080945&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;version_id&quot;</span>: <span class="number">2030599</span>,</span><br><span class="line">            <span class="attr">&quot;version&quot;</span>: <span class="string">&quot;2.3.5&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;indices&quot;</span>: [</span><br><span class="line">                <span class="string">&quot;pipe&quot;</span></span><br><span class="line">            ],</span><br><span class="line">            <span class="attr">&quot;state&quot;</span>: <span class="string">&quot;SUCCESS&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start_time&quot;</span>: <span class="string">&quot;2020-05-08T01:45:57.540Z&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;start_time_in_millis&quot;</span>: <span class="number">1588902357540</span>,</span><br><span class="line">            <span class="attr">&quot;end_time&quot;</span>: <span class="string">&quot;2020-05-08T01:45:57.586Z&quot;</span>,</span><br><span class="line">            <span class="attr">&quot;end_time_in_millis&quot;</span>: <span class="number">1588902357586</span>,</span><br><span class="line">            <span class="attr">&quot;duration_in_millis&quot;</span>: <span class="number">46</span>,</span><br><span class="line">            <span class="attr">&quot;failures&quot;</span>: [],</span><br><span class="line">            <span class="attr">&quot;shards&quot;</span>: &#123;</span><br><span class="line">                <span class="attr">&quot;total&quot;</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="attr">&quot;failed&quot;</span>: <span class="number">0</span>,</span><br><span class="line">                <span class="attr">&quot;successful&quot;</span>: <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="删除快照"><a href="#删除快照" class="headerlink" title="删除快照"></a>删除快照</h3><p><code>DELETE _snapshot/my_backup/snapshot_2</code></p>
+<h3 id="使用快照恢复数据"><a href="#使用快照恢复数据" class="headerlink" title="使用快照恢复数据"></a>使用快照恢复数据</h3><p>快照的目的就是为了备份，为了恢复。一旦你备份过了数据，恢复它就简单了：只要在你希望恢复回集群的快照 ID后面加上<code>_restore</code>即可</p>
+<p><code>POST _snapshot/my_backup/snapshot_1/_restore</code></p>
+<p>默认行为是把这个快照里存有的所有索引都恢复。如果<code>snapshot_1包括五个索引，这五个都会被恢复到我们集群里。和</code>snapshot`API 一样，我们也可以选择希望恢复具体哪个索引。</p>
+<p>还有附加的选项用来重命名索引。这个选项允许你通过模式匹配索引名称，然后通过恢复进程提供一个新名称。如果你想在不替换现有数据的前提下，恢复老数据来验证内容，或者做其他处理，这个选项很有用。让我们从快照里恢复单个索引并提供一个替换的名称：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">POST &#x2F;_snapshot&#x2F;my_backup&#x2F;snapshot_1&#x2F;_restore</span><br><span class="line">&#123;</span><br><span class="line">    &quot;indices&quot;: &quot;index_1&quot;, ①</span><br><span class="line">    &quot;rename_pattern&quot;: &quot;index_(.+)&quot;, ②</span><br><span class="line">    &quot;rename_replacement&quot;: &quot;restored_index_$1&quot; ③</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>① 只恢复<code>index_1</code>索引，忽略快照中存在的其余索引。<br>② 查找所提供的模式能匹配上的正在恢复的索引。<br>③ 然后把它们重命名成替代的模式。</p>
+<p>这个会恢复<code>index_1</code>到你及群里，但是重命名成了<code>restored_index_1</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://wangweiye01.github.io/gttx_blog/2020/03/21/elasticsearch/" data-id="ckmnaz72g0002gf6k9l071cqs" data-title="elasticsearch全文搜索" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/gttx_blog/2020/03/24/floyd/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          floyd最短路径算法
+        
+      </div>
+    </a>
+  
+  
+    <a href="/gttx_blog/2020/02/17/websocket/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">websocket简介与实战</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/gttx_blog/2021/03/24/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2021/03/24/browser-cache/">浏览器缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/03/24/floyd/">floyd最短路径算法</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/03/21/elasticsearch/">elasticsearch全文搜索</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/02/17/websocket/">websocket简介与实战</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 管通天下技术团队<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/gttx_blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/gttx_blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/gttx_blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/gttx_blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/gttx_blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

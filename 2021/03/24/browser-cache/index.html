@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>浏览器缓存机制 | 杭州管通天下科技有限公司</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="浏览器缓存是前端开发中不可避免的问题，对于web应用来说，它是提升页面性能同时减少服务器压力的利器。本文将简单地描述总结下浏览器缓存的知识和应用，希望对自己和大家都有所帮助 浏览器缓存类型 强缓存不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的network选项中可以看到该请求返回200的状态码，并且size显示from disk cache或from memory cache">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浏览器缓存机制">
+<meta property="og:url" content="https://wangweiye01.github.io/gttx_blog/2021/03/24/browser-cache/index.html">
+<meta property="og:site_name" content="杭州管通天下科技有限公司">
+<meta property="og:description" content="浏览器缓存是前端开发中不可避免的问题，对于web应用来说，它是提升页面性能同时减少服务器压力的利器。本文将简单地描述总结下浏览器缓存的知识和应用，希望对自己和大家都有所帮助 浏览器缓存类型 强缓存不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的network选项中可以看到该请求返回200的状态码，并且size显示from disk cache或from memory cache">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://p.130014.xyz/2021/03/24/cache-control-expire.png">
+<meta property="og:image" content="https://p.130014.xyz/2021/03/24/etag-lastmodified.png">
+<meta property="og:image" content="https://p.130014.xyz/2021/03/24/if-none-match.png">
+<meta property="article:published_time" content="2021-03-24T02:03:36.000Z">
+<meta property="article:modified_time" content="2021-03-24T10:24:25.122Z">
+<meta property="article:author" content="管通天下技术团队">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://p.130014.xyz/2021/03/24/cache-control-expire.png">
+  
+    <link rel="alternate" href="/gttx_blog/atom.xml" title="杭州管通天下科技有限公司" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/gttx_blog/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/gttx_blog/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/gttx_blog/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/gttx_blog/" id="logo">杭州管通天下科技有限公司</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/gttx_blog/" id="subtitle">求知若渴，虚心若愚</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/gttx_blog/">Home</a>
+        
+          <a class="main-nav-link" href="/gttx_blog/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/gttx_blog/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://wangweiye01.github.io/gttx_blog"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-browser-cache" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/gttx_blog/2021/03/24/browser-cache/" class="article-date">
+  <time class="dt-published" datetime="2021-03-24T02:03:36.000Z" itemprop="datePublished">2021-03-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      浏览器缓存机制
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>浏览器缓存是前端开发中不可避免的问题，对于web应用来说，它是提升页面性能同时减少服务器压力的利器。本文将简单地描述总结下浏览器缓存的知识和应用，希望对自己和大家都有所帮助</p>
+<h2 id="浏览器缓存类型"><a href="#浏览器缓存类型" class="headerlink" title="浏览器缓存类型"></a>浏览器缓存类型</h2><ul>
+<li><p>强缓存<br>不会向服务器发送请求，直接从缓存中读取资源，在chrome控制台的network选项中可以看到该请求返回200的状态码，并且size显示from disk cache或from memory cache</p>
+</li>
+<li><p>协商缓存<br>向服务器发送请求，服务器会根据这个请求的request header的一些参数来判断是否命中协商缓存，如果命中，则返回304状态码并带上新的response header通知浏览器从缓存中读取资源</p>
+</li>
+</ul>
+<p>两者的共同点是，都是从客户端缓存中读取资源；区别是强缓存不会发请求，协商缓存会发请求</p>
+<h2 id="缓存有关的header"><a href="#缓存有关的header" class="headerlink" title="缓存有关的header"></a>缓存有关的header</h2><h3 id="强缓存"><a href="#强缓存" class="headerlink" title="强缓存"></a>强缓存</h3><p>Expires：response header里的过期时间，浏览器再次加载资源时，如果在这个过期时间内，则命中强缓存</p>
+<p>Cache-Control：当值设为max-age=300时，则代表在这个请求正确返回时间（浏览器也会记录下来）的5分钟内再次加载资源，就会命中强缓存</p>
+<p><img src="https://p.130014.xyz/2021/03/24/cache-control-expire.png" alt="cache-control-expire.png"></p>
+<blockquote>
+<p>Expires和Cache-Control:max-age=*** 的作用是差不多的，区别就在于 Expires 是http1.0的产物，Cache-Control是http1.1的产物，两者同时存在的话，Cache-Control优先级高于Expires；在某些不支持HTTP1.1的环境下，Expires就会发挥用处。所以Expires其实是过时的产物，现阶段它的存在只是一种兼容性的写法</p>
+</blockquote>
+<blockquote>
+<p>Expires和Cache-Control的区别还有一个：Expires是一个具体的服务器时间，这就导致一个问题，如果客户端时间和服务器时间相差较大，缓存命中与否就不是开发者所期望的。Cache-Control是一个时间段，控制就比较容易</p>
+</blockquote>
+<h3 id="协商缓存"><a href="#协商缓存" class="headerlink" title="协商缓存"></a>协商缓存</h3><p>ETag和If-None-Match：这两个要一起说。Etag是上一次加载资源时，服务器返回的response header，是对该资源的一种唯一标识，只要资源有变化，Etag就会重新生成。浏览器在下一次加载资源向服务器发送请求时，会将上一次返回的Etag值放到request header里的If-None-Match里，服务器接受到If-None-Match的值后，会拿来跟该资源文件的Etag值做比较，如果相同，则表示资源文件没有发生改变，命中协商缓存</p>
+<p>Last-Modified和If-Modified-Since：这两个也要一起说。Last-Modified是该资源文件最后一次更改时间，服务器会在response header里返回，同时浏览器会将这个值保存起来，在下一次发送请求时，放到request header里的If-Modified-Since里，服务器在接收到后也会做比对，如果相同则命中协商缓存</p>
+<p><img src="https://p.130014.xyz/2021/03/24/etag-lastmodified.png" alt="etag-lastmodified.png"></p>
+<p><img src="https://p.130014.xyz/2021/03/24/if-none-match.png" alt="if-none-match.png"></p>
+<blockquote>
+<p>ETag和Last-Modified的作用和用法也是差不多，说一说他们的区别。<br>首先在精确度上，Etag要优于Last-Modified。Last-Modified的时间单位是秒，如果某个文件在1秒内改变了多次，那么他们的Last-Modified其实并没有体现出来修改，但是Etag每次都会改变确保了精度；如果是负载均衡的服务器，各个服务器生成的Last-Modified也有可能不一致。</p>
+</blockquote>
+<blockquote>
+<p>第二在性能上，Etag要逊于Last-Modified，毕竟Last-Modified只需要记录时间，而Etag需要服务器通过算法来计算出一个hash值。<br>第三在优先级上，服务器校验优先考虑Etag</p>
+</blockquote>
+<h2 id="浏览器缓存过程"><a href="#浏览器缓存过程" class="headerlink" title="浏览器缓存过程"></a>浏览器缓存过程</h2><ol>
+<li><p>浏览器第一次加载资源，服务器返回200，浏览器将资源文件从服务器上请求下载下来，并把response header及该请求的返回时间一并缓存；</p>
+</li>
+<li><p>下一次加载资源时，先比较当前时间和上一次返回200时的时间差，如果没有超过cache-control设置的max-age，则没有过期，命中强缓存，不发请求直接从本地缓存读取该文件（如果浏览器不支持HTTP1.1，则用expires判断是否过期）；如果时间过期，则向服务器发送header带有If-None-Match和If-Modified-Since的请求；</p>
+</li>
+<li><p>服务器收到请求后，优先根据Etag的值判断被请求的文件有没有做修改，Etag值一致则没有修改，命中协商缓存，返回304；如果不一致则有改动，直接返回新的资源文件带上新的Etag值并返回200；</p>
+</li>
+<li><p>如果服务器收到的请求没有Etag值，则将If-Modified-Since和被请求文件的最后修改时间做比对，一致则命中协商缓存，返回304；不一致则返回新的last-modified和文件并返回200；</p>
+</li>
+</ol>
+<h2 id="用户行为对浏览器缓存的控制"><a href="#用户行为对浏览器缓存的控制" class="headerlink" title="用户行为对浏览器缓存的控制"></a>用户行为对浏览器缓存的控制</h2><ol>
+<li>地址栏访问，链接跳转是正常用户行为，将会触发浏览器缓存机制；</li>
+<li>F5刷新，浏览器会设置max-age=0，跳过强缓存判断，会进行协商缓存判断；</li>
+<li>ctrl+F5刷新，跳过强缓存和协商缓存，直接从服务器拉取资源。</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://github.com/chenjiangsong/blog/issues/1">原文链接</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://wangweiye01.github.io/gttx_blog/2021/03/24/browser-cache/" data-id="ckmnaz7240000gf6kezfv3qnm" data-title="浏览器缓存机制" class="article-share-link">Share</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/gttx_blog/2021/03/24/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Hello World
+        
+      </div>
+    </a>
+  
+  
+    <a href="/gttx_blog/2020/03/24/floyd/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">floyd最短路径算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2021/03/">March 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2020/03/">March 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/gttx_blog/archives/2020/02/">February 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/gttx_blog/2021/03/24/hello-world/">Hello World</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2021/03/24/browser-cache/">浏览器缓存机制</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/03/24/floyd/">floyd最短路径算法</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/03/21/elasticsearch/">elasticsearch全文搜索</a>
+          </li>
+        
+          <li>
+            <a href="/gttx_blog/2020/02/17/websocket/">websocket简介与实战</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 管通天下技术团队<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/gttx_blog/" class="mobile-nav-link">Home</a>
+  
+    <a href="/gttx_blog/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/gttx_blog/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/gttx_blog/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/gttx_blog/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
